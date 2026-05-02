@@ -1,47 +1,25 @@
 import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  Building2,
-  CheckCircle2,
-  Mail,
-  MapPin,
-  Menu,
-  Phone,
-  Sparkles,
-  X,
-} from "lucide-react";
+import { ArrowRight, CheckCircle2, Mail, MapPin, Menu, Phone, X } from "lucide-react";
 
 const projects = [
   {
     title: "Signature Residence",
-    category: "Residential",
+    type: "Residential",
     image:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=90",
   },
   {
     title: "Urban Commercial Hub",
-    category: "Commercial",
+    type: "Commercial",
     image:
-      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=90",
   },
   {
     title: "Premium Villa Renovation",
-    category: "Renovations",
+    type: "Renovations",
     image:
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    title: "Modern Apartment Block",
-    category: "Residential",
-    image:
-      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    title: "Corporate Tower Fit-Out",
-    category: "Commercial",
-    image:
-      "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1600&q=90",
   },
 ];
 
@@ -59,95 +37,121 @@ const facilities = [
   "End-to-end design, construction, and renovation support",
 ];
 
-function SectionTitle({ eyebrow, title, children }) {
+const revealUp = {
+  hidden: { opacity: 0, y: 80 },
+  visible: { opacity: 1, y: 0 },
+};
+
+const revealLeft = {
+  hidden: { opacity: 0, x: -90, scale: 1.08 },
+  visible: { opacity: 1, x: 0, scale: 1 },
+};
+
+const revealRight = {
+  hidden: { opacity: 0, x: 90, scale: 1.08 },
+  visible: { opacity: 1, x: 0, scale: 1 },
+};
+
+function AnimatedImage({ src, alt, className = "", direction = "up" }) {
+  const variant = direction === "left" ? revealLeft : direction === "right" ? revealRight : revealUp;
+
   return (
-    <div className="mx-auto mb-10 max-w-3xl text-center sm:mb-12">
-      <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-[#ba319f] sm:text-xs sm:tracking-[0.35em]">
-        {eyebrow}
-      </p>
-      <h2 className="font-serif text-3xl font-semibold leading-tight text-white sm:text-4xl md:text-6xl">
-        {title}
-      </h2>
-      {children && (
-        <p className="mt-5 text-sm leading-7 text-white/70 sm:text-base sm:leading-8">
-          {children}
-        </p>
-      )}
-    </div>
+    <motion.div
+      variants={variant}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: false, amount: 0.25 }}
+      transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+      className={`overflow-hidden ${className}`}
+    >
+      <motion.img
+        src={src}
+        alt={alt}
+        className="h-full w-full object-cover"
+        initial={{ scale: 1.12 }}
+        whileInView={{ scale: 1 }}
+        viewport={{ once: false, amount: 0.25 }}
+        transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+      />
+    </motion.div>
   );
 }
 
 function Nav() {
   const [open, setOpen] = useState(false);
-
-  const closeMenu = () => setOpen(false);
+  const links = [
+    ["About", "#about"],
+    ["Founder", "#founder"],
+    ["Vision", "#vision"],
+    ["Projects", "#projects"],
+    ["Services", "#services"],
+    ["Contact", "#contact"],
+  ];
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#100725]/80 backdrop-blur-xl">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <a
-          href="#home"
-          onClick={closeMenu}
-          className="font-serif text-xs font-bold uppercase tracking-[0.18em] text-white sm:text-sm md:text-base md:tracking-[0.25em]"
-        >
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-[#ded3c2] bg-[#f7f3ec]/90 backdrop-blur-xl">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-5 sm:py-5 lg:px-8">
+        <a href="#home" className="font-serif text-[18px] font-light tracking-tight text-[#2d2925]">
           Key Foundations
         </a>
 
-        <div className="hidden items-center gap-8 text-sm text-white/70 md:flex">
-          <a href="#about" className="hover:text-[#ba319f]">
-            About Us
-          </a>
-          <a href="#projects" className="hover:text-[#ba319f]">
-            Projects
-          </a>
-          <a href="#services" className="hover:text-[#ba319f]">
-            Services
-          </a>
-          <a href="#contact" className="hover:text-[#ba319f]">
-            Contact
-          </a>
+        <div className="hidden items-center gap-8 text-[10px] font-medium uppercase tracking-[0.3em] text-[#6f6760] md:flex">
+          {links.map(([label, href]) => (
+            <a key={label} href={href} className="transition hover:text-[#a5825a]">
+              {label}
+            </a>
+          ))}
         </div>
 
         <a
           href="#contact"
-          className="hidden rounded-full bg-gradient-to-r from-[#6e1f86] to-[#ba319f] px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-[#ba319f]/20 md:inline-flex"
+          className="hidden border border-[#b89b77] px-5 py-3 text-[10px] font-medium uppercase tracking-[0.28em] text-[#8b6b46] transition hover:bg-[#8b6b46] hover:text-white md:inline-flex"
         >
-          Enquire Now
+          Enquire
         </a>
 
         <button
-          type="button"
           onClick={() => setOpen(!open)}
-          className="rounded-full border border-white/10 bg-white/5 p-2 text-white md:hidden"
+          className="rounded-full border border-[#d8cbb9] p-2 text-[#2d2925] md:hidden"
           aria-label="Toggle menu"
         >
-          {open ? <X size={22} /> : <Menu size={22} />}
+          {open ? <X size={20} /> : <Menu size={20} />}
         </button>
       </nav>
 
       {open && (
-        <motion.div
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="border-t border-white/10 bg-[#100725]/95 px-4 pb-5 pt-3 md:hidden"
-        >
-          <div className="mx-auto flex max-w-7xl flex-col gap-3 text-sm font-medium text-white/80">
-            <a onClick={closeMenu} href="#about" className="rounded-2xl bg-white/5 px-4 py-3">
-              About Us
-            </a>
-            <a onClick={closeMenu} href="#projects" className="rounded-2xl bg-white/5 px-4 py-3">
-              Projects
-            </a>
-            <a onClick={closeMenu} href="#services" className="rounded-2xl bg-white/5 px-4 py-3">
-              Services
-            </a>
-            <a onClick={closeMenu} href="#contact" className="rounded-2xl bg-[#ba319f] px-4 py-3 font-bold text-white">
-              Contact Us
-            </a>
+        <div className="border-t border-[#e6ded2] bg-[#f7f3ec] px-5 pb-5 md:hidden">
+          <div className="grid gap-2 pt-3 text-sm text-[#4d4741]">
+            {links.map(([label, href]) => (
+              <a key={label} onClick={() => setOpen(false)} href={href} className="py-3">
+                {label}
+              </a>
+            ))}
           </div>
-        </motion.div>
+        </div>
       )}
     </header>
+  );
+}
+
+function SectionHeading({ eyebrow, title, children }) {
+  return (
+    <motion.div
+      variants={revealUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: false, amount: 0.35 }}
+      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      className="mx-auto mb-10 max-w-3xl text-center sm:mb-14"
+    >
+      <p className="mb-4 text-[10px] font-medium uppercase tracking-[0.35em] text-[#b4936b]">
+        {eyebrow}
+      </p>
+      <h2 className="font-serif text-[30px] font-light leading-[1.12] tracking-tight text-[#2d2925] sm:text-[42px] lg:text-[48px]">
+        {title}
+      </h2>
+      {children && <p className="mx-auto mt-4 max-w-2xl text-[14px] font-light leading-7 text-[#756d66] sm:mt-5 sm:text-[15px]">{children}</p>}
+    </motion.div>
   );
 }
 
@@ -157,299 +161,348 @@ export default function App() {
 
   const filteredProjects = useMemo(() => {
     if (activeCategory === "All Projects") return projects;
-    return projects.filter((project) => project.category === activeCategory);
+    return projects.filter((project) => project.type === activeCategory);
   }, [activeCategory]);
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#100725] text-white">
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_15%_20%,rgba(186,49,159,0.35),transparent_28%),radial-gradient(circle_at_85%_5%,rgba(110,31,134,0.32),transparent_30%),linear-gradient(135deg,#100725_0%,#220b39_45%,#491358_100%)]" />
-      <div className="fixed inset-0 -z-10 bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:56px_56px] opacity-50" />
-
+    <main className="min-h-screen overflow-x-hidden bg-[#f7f3ec] font-sans text-[#2d2925]">
       <Nav />
 
+      <section id="home" className="pt-[65px] sm:pt-20">
+        <div className="relative h-[78vh] min-h-[520px] overflow-hidden sm:h-[88vh] sm:min-h-[620px]">
+          <motion.video
+            className="h-full w-full object-cover"
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2200&q=90"
+            initial={{ scale: 1.12, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <source src="/video.mp4" type="video/mp4" />
+          </motion.video>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/42 to-black/5" />
+
+          <motion.div
+            initial={{ opacity: 0, y: 55 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.1, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-0 mx-auto flex max-w-7xl items-center px-4 sm:px-5 lg:px-8"
+          >
+            <div className="max-w-4xl text-white">
+              <p className="mb-4 text-[9px] font-medium uppercase tracking-[0.28em] text-[#d8bd93] sm:mb-5 sm:text-[10px] sm:tracking-[0.35em]">
+                Key Foundation Builders & Developers
+              </p>
+              <h1 className="font-serif text-[38px] font-light leading-[1.05] tracking-tight sm:text-[56px] lg:text-[68px]">
+                Your dream, our responsibility.
+              </h1>
+              <p className="mt-5 max-w-xl text-[14px] font-light leading-7 text-white/80 sm:mt-7 sm:text-[15px]">
+                We build spaces with passion, trust, quality, and complete assurance.
+              </p>
+              <a
+                href="#contact"
+                className="mt-7 inline-flex items-center gap-3 bg-[#f7f3ec] px-5 py-3 text-[10px] font-medium uppercase tracking-[0.2em] text-[#2d2925] transition hover:bg-[#d8bd93] sm:mt-9 sm:px-7 sm:py-4 sm:text-[11px] sm:tracking-[0.22em]"
+              >
+                Start a Project <ArrowRight size={17} />
+              </a>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <motion.section
+        id="about"
+        className="mx-auto grid max-w-7xl gap-8 px-4 py-16 sm:px-5 sm:py-24 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:py-32"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.35 }}
+        transition={{ staggerChildren: 0.22 }}
+      >
+        <motion.div variants={revealUp} transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}>
+          <p className="mb-4 text-[10px] font-medium uppercase tracking-[0.35em] text-[#b4936b]">
+            Our Story
+          </p>
+          <h2 className="font-serif text-[30px] font-light leading-[1.12] tracking-tight text-[#2d2925] sm:text-[42px] lg:text-[48px]">
+            A passionate journey in construction.
+          </h2>
+        </motion.div>
+        <motion.div variants={revealUp} transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }} className="flex items-center">
+          <p className="text-[14px] font-light leading-7 text-[#756d66] sm:text-[15px]">
+            Key Foundation Builders & Developers is committed to creating spaces that reflect quality, integrity, and care. Our journey is guided by trust, precision, and a deep responsibility toward every client’s dream.
+          </p>
+        </motion.div>
+      </motion.section>
+
       <section
-        id="home"
-        className="mx-auto grid min-h-screen max-w-7xl grid-cols-1 items-center gap-10 px-4 pb-16 pt-28 sm:px-6 md:grid-cols-[1.1fr_0.9fr] md:gap-12 lg:px-8"
+        id="founder"
+        className="bg-[#2d2925] px-4 py-16 text-white sm:px-5 sm:py-24 lg:px-8 lg:py-32"
       >
         <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center md:text-left"
+          className="mx-auto max-w-5xl text-center"
+          initial={{ opacity: 0, y: 70 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.32em] text-[#ba319f] sm:text-xs sm:tracking-[0.4em]">
-            Builders & Developers
+          <p className="mb-4 text-[9px] font-medium uppercase tracking-[0.28em] text-[#d8bd93] sm:mb-5 sm:text-[10px] sm:tracking-[0.35em]">
+            Meet Our Founder
           </p>
-          <h1 className="font-serif text-4xl font-semibold leading-[1.02] tracking-tight sm:text-5xl md:text-7xl lg:text-8xl">
-            Key Foundation Builders & Developers
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-white/72 sm:text-lg md:mx-0">
-            Key Foundations — your dream, our responsibility. We build spaces with
-            passion, trust, quality, and complete assurance.
+
+          <h2 className="font-serif text-[30px] font-light leading-[1.12] tracking-tight sm:text-[42px] lg:text-[48px]">
+            Jobiyas Johny
+          </h2>
+
+          <p className="mx-auto mt-6 max-w-4xl font-serif text-[19px] font-light italic leading-[1.55] text-white/85 sm:mt-8 sm:text-[22px] md:text-[26px]">
+            “At Key Foundations, every project we take on is a promise — built
+            with passion, guided by trust, and delivered with uncompromising
+            quality. We understand that we are not just building structures, but
+            fulfilling dreams. That’s why we work with care, integrity, and
+            complete assurance, treating every project as our own.”
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center md:justify-start">
-            <a
-              href="#projects"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#6e1f86] to-[#ba319f] px-6 py-4 font-bold text-white shadow-2xl shadow-[#ba319f]/25"
-            >
-              View Projects <ArrowRight size={18} />
-            </a>
-            <a
-              href="#about"
-              className="inline-flex justify-center rounded-full border border-white/15 bg-white/5 px-6 py-4 font-bold text-white hover:bg-white/10"
-            >
-              Our Story
-            </a>
+
+          <p className="mx-auto mt-5 max-w-2xl text-[14px] font-light leading-7 text-white/65 sm:mt-6 sm:text-[15px]">
+            Your trust is our foundation, and your satisfaction is our greatest
+            achievement.
+          </p>
+
+          <p className="mt-7 text-[10px] uppercase leading-6 tracking-[0.18em] text-white/45 sm:mt-8 sm:text-[11px] sm:tracking-[0.2em]">
+            Founder and Managing Director, Key Foundation Builders and Developers
+          </p>
+        </motion.div>
+      </section>
+
+      <section id="vision" className="mx-auto grid max-w-7xl gap-8 px-4 py-16 sm:px-5 sm:py-24 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:py-32">
+        <AnimatedImage
+          direction="left"
+          src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=90"
+          alt="Modern tower"
+          className="h-[320px] bg-[#eee5d8] sm:h-[420px] lg:min-h-[500px]"
+        />
+        <motion.div
+          className="flex items-center"
+          initial={{ opacity: 0, x: 70 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false, amount: 0.35 }}
+          transition={{ duration: 1, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <div>
+            <p className="mb-4 text-[10px] font-medium uppercase tracking-[0.35em] text-[#b4936b]">
+              Our Vision
+            </p>
+            <h2 className="font-serif text-[30px] font-light leading-[1.12] tracking-tight text-[#2d2925] sm:text-[42px] lg:text-[48px]">
+              Trusted spaces with enduring value.
+            </h2>
+            <p className="mt-6 text-[15px] font-light leading-7 text-[#756d66]">
+              To be a trusted name in construction, known for creating spaces that reflect quality, integrity, and care. We envision building not just structures, but lasting relationships — delivering every project with passion, precision, and complete assurance. Our goal is to shape a future where every space we create stands as a symbol of trust, excellence, and enduring value.
+            </p>
           </div>
         </motion.div>
+      </section>
+
+      <section id="mission" className="mx-auto grid max-w-7xl gap-8 px-4 py-16 sm:px-5 sm:py-24 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:py-32">
+        <motion.div
+          className="order-2 flex items-center lg:order-1"
+          initial={{ opacity: 0, x: -70 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false, amount: 0.35 }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <div>
+            <p className="mb-4 text-[10px] font-medium uppercase tracking-[0.35em] text-[#b4936b]">
+              Our Mission
+            </p>
+            <h2 className="font-serif text-[30px] font-light leading-[1.12] tracking-tight text-[#2d2925] sm:text-[42px] lg:text-[48px]">
+              Built with integrity. Delivered with excellence.
+            </h2>
+            <p className="mt-6 text-[15px] font-light leading-7 text-[#756d66]">
+              To build with integrity, deliver with excellence, and earn trust that lasts a lifetime.
+            </p>
+          </div>
+        </motion.div>
+        <AnimatedImage
+          direction="right"
+          src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1200&q=90"
+          alt="High-rise building"
+          className="order-1 h-[320px] bg-[#eee5d8] sm:h-[420px] lg:order-2 lg:h-[500px]"
+        />
+      </section>
+
+      <section id="projects" className="bg-white px-4 py-16 sm:px-5 sm:py-24 lg:px-8 lg:py-32">
+        <SectionHeading eyebrow="Our Project" title="Selected premium works">
+          Showing our best projects with elegant titles and a premium category filter.
+        </SectionHeading>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.9, delay: 0.1 }}
-          className="relative min-h-[390px] overflow-hidden rounded-[1.7rem] border border-white/15 bg-white/5 shadow-2xl shadow-black/35 sm:min-h-[470px] sm:rounded-[2.2rem] md:min-h-[540px]"
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.35 }}
+          transition={{ duration: 0.8 }}
+          className="mb-8 flex justify-start gap-3 overflow-x-auto pb-2 sm:mb-10 sm:justify-center"
         >
-          <img
-            className="h-[390px] object-cover opacity-85 sm:h-[470px] md:h-[540px]"
-            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80"
-            alt="Premium high-rise building"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#100725] via-transparent to-transparent" />
-          <div className="absolute bottom-4 left-4 right-4 rounded-3xl border border-white/15 bg-[#100725]/70 p-5 backdrop-blur-xl sm:bottom-6 sm:left-6 sm:right-6 sm:p-6">
-            <Sparkles className="mb-3 text-[#ba319f]" />
-            <h3 className="font-serif text-xl sm:text-2xl">Built with responsibility</h3>
-            <p className="mt-2 text-sm leading-7 text-white/70">
-              Every project is treated as a promise — planned carefully, delivered beautifully.
-            </p>
-          </div>
-        </motion.div>
-      </section>
-
-      <section id="about" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-        <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-[0.9fr_1.1fr]">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <img
-              className="h-64 rounded-[1.7rem] border border-white/15 object-cover sm:h-80 sm:rounded-[2rem]"
-              src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80"
-              alt="Modern building"
-            />
-            <img
-              className="h-64 rounded-[1.7rem] border border-white/15 object-cover sm:mt-12 sm:h-80 sm:rounded-[2rem]"
-              src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=900&q=80"
-              alt="Planning discussion"
-            />
-          </div>
-
-          <div className="rounded-[1.7rem] border border-white/15 bg-white/[0.06] p-6 shadow-2xl shadow-black/25 sm:rounded-[2rem] sm:p-8 md:p-12">
-            <p className="mb-3 text-xs font-bold uppercase tracking-[0.35em] text-[#ba319f]">
-              Our Story
-            </p>
-            <h2 className="font-serif text-3xl font-semibold sm:text-4xl md:text-6xl">
-              A passionate journey in construction
-            </h2>
-            <p className="mt-6 text-sm leading-8 text-white/72 sm:text-base">
-              Key Foundation Builders & Developers is committed to creating spaces that
-              reflect quality, integrity, and care. Our journey is guided by trust,
-              precision, and a deep responsibility toward every client’s dream.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-[0.75fr_1.25fr]">
-          <div className="flex min-h-[300px] items-center justify-center rounded-[1.7rem] border border-white/15 bg-gradient-to-br from-black to-[#491358] p-8 text-center text-white/45 sm:min-h-[460px] sm:rounded-[2rem]">
-            Founder’s Photo
-          </div>
-          <div className="rounded-[1.7rem] border border-white/15 bg-[#220b39]/70 p-6 sm:rounded-[2rem] sm:p-8 md:p-12">
-            <p className="mb-3 text-xs font-bold uppercase tracking-[0.35em] text-[#ba319f]">
-              Meet Our Founder
-            </p>
-            <h2 className="font-serif text-3xl font-semibold sm:text-4xl md:text-6xl">
-              Jobiyas Johny
-            </h2>
-            <p className="mt-6 text-base italic leading-8 text-white/82 sm:text-lg sm:leading-9">
-              “At Key Foundations, every project we take on is a promise — built with
-              passion, guided by trust, and delivered with uncompromising quality. We
-              understand that we are not just building structures, but fulfilling dreams.”
-            </p>
-            <p className="mt-6 text-sm leading-7 text-white/70 sm:text-base">
-              Founder and Managing Director, Key Foundation Builders and Developers
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div className="rounded-[1.7rem] border border-white/15 bg-white/[0.06] p-6 sm:rounded-[2rem] sm:p-8 md:p-10">
-            <Building2 className="mb-6 text-[#ba319f]" size={34} />
-            <h2 className="font-serif text-3xl sm:text-4xl">Our Vision</h2>
-            <p className="mt-5 text-sm leading-8 text-white/72 sm:text-base">
-              To be a trusted name in construction, known for creating spaces that
-              reflect quality, integrity, and care — building lasting relationships
-              through passion, precision, and complete assurance.
-            </p>
-          </div>
-          <div className="rounded-[1.7rem] border border-white/15 bg-gradient-to-br from-[#491358]/75 to-[#220b39]/80 p-6 sm:rounded-[2rem] sm:p-8 md:p-10">
-            <CheckCircle2 className="mb-6 text-[#ba319f]" size={34} />
-            <h2 className="font-serif text-3xl sm:text-4xl">Our Mission</h2>
-            <p className="mt-5 text-lg leading-8 text-white/80 sm:text-xl sm:leading-9">
-              “To build with integrity, deliver with excellence, and earn trust that lasts a lifetime.”
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section id="projects" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-        <SectionTitle eyebrow="Our Project" title="Selected premium works">
-          Showcasing 3–5 best projects with elegant titles and a premium category filter.
-        </SectionTitle>
-
-        <div className="mb-8 flex gap-3 overflow-x-auto pb-2 sm:flex-wrap sm:justify-center sm:overflow-visible">
           {categories.map((category) => (
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
-              className={`shrink-0 rounded-full border px-5 py-3 text-sm font-bold transition ${
+              className={`shrink-0 border px-5 py-3 text-[10px] font-medium uppercase tracking-[0.25em] transition ${
                 activeCategory === category
-                  ? "border-[#ba319f] bg-[#ba319f] text-white"
-                  : "border-white/15 bg-white/5 text-white/70 hover:bg-white/10"
+                  ? "border-[#8b6b46] bg-[#8b6b46] text-white"
+                  : "border-[#d8cbb9] text-[#756d66] hover:border-[#8b6b46] hover:text-[#8b6b46]"
               }`}
             >
               {category}
             </button>
           ))}
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredProjects.map((project) => (
+        <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredProjects.map((project, index) => (
             <motion.article
-              layout
               key={project.title}
-              className="group overflow-hidden rounded-[1.7rem] border border-white/15 bg-white/[0.06] sm:rounded-[2rem]"
+              className="group"
+              initial={{ opacity: 0, y: 90 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.25 }}
+              transition={{ duration: 0.9, delay: index * 0.16, ease: [0.22, 1, 0.36, 1] }}
             >
-              <img
-                className="h-64 object-cover transition duration-500 group-hover:scale-105 sm:h-72"
-                src={project.image}
-                alt={project.title}
-              />
-              <div className="p-5 sm:p-6">
-                <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#ba319f]">
-                  {project.category}
-                </p>
-                <h3 className="mt-2 font-serif text-xl sm:text-2xl">{project.title}</h3>
+              <div className="overflow-hidden bg-[#eee5d8]">
+                <motion.img
+                  src={project.image}
+                  alt={project.title}
+                  className="h-[300px] w-full object-cover sm:h-[380px] lg:h-[430px]"
+                  initial={{ scale: 1.12 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: false, amount: 0.25 }}
+                  transition={{ duration: 1.25, delay: index * 0.16, ease: [0.22, 1, 0.36, 1] }}
+                />
               </div>
+              <motion.div
+                className="pt-4 sm:pt-6"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{ duration: 0.7, delay: 0.25 + index * 0.12 }}
+              >
+                <p className="mb-2 text-[10px] font-medium uppercase tracking-[0.3em] text-[#b4936b]">
+                  {project.type}
+                </p>
+                <h3 className="font-serif text-[22px] font-light tracking-tight text-[#2d2925]">{project.title}</h3>
+              </motion.div>
             </motion.article>
           ))}
         </div>
       </section>
 
-      <section id="services" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-        <SectionTitle eyebrow="Our Services" title="Complete construction support" />
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <section id="facilities" className="mx-auto max-w-7xl px-4 py-16 sm:px-5 sm:py-24 lg:px-8 lg:py-32">
+        <SectionHeading eyebrow="Our Facilities" title="Built for assurance" />
+        <div className="grid gap-1 border-y border-[#d8cbb9]">
+          {facilities.map((facility, index) => (
+            <motion.div
+              key={facility}
+              className="grid gap-3 border-b border-[#d8cbb9] py-6 last:border-b-0 sm:grid-cols-[90px_1fr_auto] sm:items-center sm:gap-4 sm:py-8"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: false, amount: 0.35 }}
+              transition={{ duration: 0.75, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <span className="font-serif text-[28px] font-light text-[#b4936b]">0{index + 1}</span>
+              <h3 className="font-serif text-[22px] font-light tracking-tight text-[#2d2925]">{facility}</h3>
+              <CheckCircle2 className="text-[#b4936b]" />
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      <section id="services" className="bg-white px-4 py-16 sm:px-5 sm:py-24 lg:px-8 lg:py-32">
+        <SectionHeading eyebrow="Our Service" title="What we do" />
+        <div className="mx-auto grid max-w-7xl gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((service, index) => (
-            <div
+            <motion.div
               key={service}
-              className="rounded-[1.7rem] border border-white/15 bg-white/[0.06] p-6 sm:rounded-[2rem] sm:p-7"
+              className="border border-[#e6ded2] p-5 transition hover:border-[#b4936b] sm:p-7"
+              initial={{ opacity: 0, y: 70 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.3 }}
+              transition={{ duration: 0.8, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
             >
-              <span className="text-5xl font-black text-white/10">0{index + 1}</span>
-              <CheckCircle2 className="my-5 text-[#ba319f]" />
-              <h3 className="font-serif text-xl sm:text-2xl">{service}</h3>
-            </div>
+              <span className="font-serif text-[32px] font-light text-[#b4936b]">0{index + 1}</span>
+              <h3 className="mt-6 font-serif text-[22px] font-light tracking-tight text-[#2d2925] sm:mt-10">{service}</h3>
+            </motion.div>
           ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-[0.9fr_1.1fr]">
+      <motion.section
+        className="mx-auto max-w-7xl px-4 py-16 text-center sm:px-5 sm:py-24 lg:px-8 lg:py-32"
+        initial={{ opacity: 0, y: 70 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.35 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <p className="mb-4 text-[10px] font-medium uppercase tracking-[0.35em] text-[#b4936b]">
+          Our Valued Clients
+        </p>
+        <h2 className="font-serif text-[30px] font-light leading-[1.12] tracking-tight text-[#2d2925] sm:text-[42px] lg:text-[48px]">
+          Trusted by people who value quality.
+        </h2>
+        <p className="mx-auto mt-5 max-w-xl text-[14px] font-light leading-7 text-[#756d66] sm:text-[15px]">
+          We have proudly worked with homeowners, businesses, architects, and developers who trust us to deliver quality, clarity, and lasting value.
+        </p>
+        <div className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4">
+          <div className="border border-[#e2d9cd] px-3 py-5 text-[12px] font-medium tracking-wide text-[#2d2925] transition hover:border-[#b4936b] hover:bg-white">
+            Homeowners
+          </div>
+          <div className="border border-[#e2d9cd] px-3 py-5 text-[12px] font-medium tracking-wide text-[#2d2925] transition hover:border-[#b4936b] hover:bg-white">
+            Commercial Clients
+          </div>
+          <div className="border border-[#e2d9cd] px-3 py-5 text-[12px] font-medium tracking-wide text-[#2d2925] transition hover:border-[#b4936b] hover:bg-white">
+            Architects
+          </div>
+          <div className="border border-[#e2d9cd] px-3 py-5 text-[12px] font-medium tracking-wide text-[#2d2925] transition hover:border-[#b4936b] hover:bg-white">
+            Developers
+          </div>
+        </div>
+      </motion.section>
+
+      <section id="contact" className="bg-[#2d2925] px-4 py-16 text-white sm:px-5 sm:py-24 lg:px-8 lg:py-32">
+        <motion.div
+          className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-12"
+          initial={{ opacity: 0, y: 70 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.25 }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        >
           <div>
-            <p className="mb-3 text-xs font-bold uppercase tracking-[0.35em] text-[#ba319f]">
-              Our Facilities
-            </p>
-            <h2 className="font-serif text-3xl font-semibold sm:text-4xl md:text-6xl">
-              Designed for assurance
-            </h2>
-          </div>
-          <div className="grid gap-4">
-            {facilities.map((facility) => (
-              <div
-                key={facility}
-                className="flex gap-4 rounded-3xl border border-white/15 bg-white/[0.06] p-5"
-              >
-                <CheckCircle2 className="mt-1 shrink-0 text-[#ba319f]" />
-                <p className="text-sm leading-7 text-white/75 sm:text-base">{facility}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-        <SectionTitle eyebrow="Our Valued Clients" title="Trusted by people who value quality" />
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          {["Client 01", "Client 02", "Client 03", "Client 04"].map((client) => (
-            <div
-              key={client}
-              className="rounded-3xl border border-white/15 bg-white/[0.06] p-5 text-center font-serif text-base text-white/70 sm:p-8 sm:text-xl"
-            >
-              {client}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section id="contact" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-        <div className="overflow-hidden rounded-[1.7rem] border border-white/15 bg-[#220b39]/80 shadow-2xl shadow-black/35 sm:rounded-[2.4rem] md:grid md:grid-cols-[1fr_0.9fr]">
-          <div className="p-6 sm:p-8 md:p-12">
-            <p className="mb-3 text-xs font-bold uppercase tracking-[0.35em] text-[#ba319f]">
+            <p className="mb-4 text-[10px] font-medium uppercase tracking-[0.35em] text-[#d8bd93]">
               Contact Us
             </p>
-            <h2 className="font-serif text-3xl font-semibold sm:text-4xl md:text-6xl">
-              Let’s build your dream
+            <h2 className="font-serif text-[30px] font-light leading-[1.12] tracking-tight sm:text-[42px] lg:text-[48px]">
+              Let’s build something beautiful.
             </h2>
-            <p className="mt-6 text-sm leading-8 text-white/72 sm:text-base">
-              Share your project idea and our team will help you plan the next step with
-              clarity and confidence.
+            <p className="mt-5 max-w-md text-[14px] font-light leading-7 text-white/65 sm:mt-6 sm:text-[15px]">
+              Share your idea with us. We’ll help you plan the next step clearly and confidently.
             </p>
-            <div className="mt-8 grid gap-4 text-sm text-white/75 sm:text-base">
-              <p className="flex items-center gap-3">
-                <Phone className="shrink-0 text-[#ba319f]" /> +91 00000 00000
-              </p>
-              <p className="flex items-center gap-3">
-                <Mail className="shrink-0 text-[#ba319f]" /> info@keyfoundations.com
-              </p>
-              <p className="flex items-center gap-3">
-                <MapPin className="shrink-0 text-[#ba319f]" /> Kerala, India
-              </p>
+            <div className="mt-7 grid gap-4 text-sm text-white/80 sm:mt-8 sm:text-base">
+              <p className="flex items-center gap-3"><Phone size={18} className="text-[#d8bd93]" /> +91 00000 00000</p>
+              <p className="flex items-center gap-3"><Mail size={18} className="text-[#d8bd93]" /> info@keyfoundations.com</p>
+              <p className="flex items-center gap-3"><MapPin size={18} className="text-[#d8bd93]" /> Kerala, India</p>
             </div>
           </div>
 
-          <form className="grid gap-4 bg-white/[0.05] p-6 sm:p-8 md:p-12">
-            <input
-              className="rounded-2xl border border-white/15 bg-[#100725]/70 px-5 py-4 outline-none placeholder:text-white/40"
-              placeholder="Your name"
-            />
-            <input
-              className="rounded-2xl border border-white/15 bg-[#100725]/70 px-5 py-4 outline-none placeholder:text-white/40"
-              placeholder="Phone / Email"
-            />
-            <textarea
-              className="min-h-36 rounded-2xl border border-white/15 bg-[#100725]/70 px-5 py-4 outline-none placeholder:text-white/40"
-              placeholder="Tell us about your project"
-            />
-            <button
-              type="button"
-              className="rounded-full bg-gradient-to-r from-[#6e1f86] to-[#ba319f] px-6 py-4 font-bold text-white"
-            >
+          <form className="grid gap-4">
+            <input className="border border-white/15 bg-white/5 px-4 py-4 text-sm outline-none placeholder:text-white/38 focus:border-[#d8bd93] sm:px-5 sm:text-base" placeholder="Your name" />
+            <input className="border border-white/15 bg-white/5 px-4 py-4 text-sm outline-none placeholder:text-white/38 focus:border-[#d8bd93] sm:px-5 sm:text-base" placeholder="Phone / Email" />
+            <textarea className="min-h-36 border border-white/15 bg-white/5 px-4 py-4 text-sm outline-none placeholder:text-white/38 focus:border-[#d8bd93] sm:px-5 sm:text-base" placeholder="Tell us about your project" />
+            <button type="button" className="bg-[#d8bd93] px-6 py-4 text-[10px] font-medium uppercase tracking-[0.2em] text-[#2d2925] transition hover:bg-white sm:px-7 sm:text-[11px] sm:tracking-[0.22em]">
               Send Enquiry
             </button>
           </form>
-        </div>
+        </motion.div>
       </section>
 
-      <footer className="border-t border-white/10 px-4 py-8 text-center text-xs leading-6 text-white/55 sm:px-6 sm:text-sm">
-        © 2026 Key Foundation Builders & Developers. Your dream, our responsibility.
+      <footer className="bg-[#2d2925] px-4 pb-8 text-center text-[10px] uppercase leading-6 tracking-[0.18em] text-white/35 sm:px-5 sm:pb-10 sm:text-xs sm:tracking-[0.2em]">
+        © 2026 Key Foundation Builders & Developers
       </footer>
     </main>
   );
